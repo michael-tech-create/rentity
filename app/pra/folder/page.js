@@ -1,20 +1,23 @@
-"use client"
-import { Button } from "@mui/material";
-import { useState } from "react";
 
+    "use client"
+import { useEffect, useState } from "react";
+import { IoLogoFacebook } from "react-icons/io";
 
-export default function UserInfo() {
-const [count, setCount] = useState(0)
-  return (
-    <main>
-    <div className="text-center flex-cols gap-10 justify-center items-center my-6">
-        <p className="mb-6 ">count: {count}</p>
-<button onClick={()=>setCount(count + 1)} className="bg-blue-500 rounded w-[100px] h-[50px] text-white">click to add</button>
-    </div>
-    <Button className="ml-10" variant="contained">click on me</Button>
-
-    
-    </main>
-  );
+export default function LoginPage () {
+    const [count, setCount] = useState (0);
+        useEffect (()=>{
+            const handleFetch = async () => {
+                const response = await fetch ("");
+                const data = await response.json();
+                console.log(data);
+            }
+            handleFetch()
+        },[])
+     return (
+        <main className="flex flex-col gap-3 justify-center items-center">
+            < IoLogoFacebook className="text-4xl text-red-500 mt-2" />
+            <p>Count: {count} </p>
+      <button onClick={()=>{setCount(count + 1)}} className="w-[100px] h-[70px] rounded bg-blue-500 text-white">increment</button>
+        </main>
+    );
 }
-
