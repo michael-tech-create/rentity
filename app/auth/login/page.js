@@ -12,7 +12,7 @@ export default async function Login () {
                     <h1 className="text-4xl font-semibold text-center">Sign In</h1>
                     <p className="block text-blue-300 text-center text-base ">Create an account or sign in</p>
                 </div>
-                <from className="justify-items-center">
+                <from className="justify-center items-center">
                     <div className="w-full mb-2">
                     <TextField
                     placeholder="@michael.com"
