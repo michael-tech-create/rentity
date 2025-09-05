@@ -20,7 +20,7 @@ export function Navbar () {
                     <li>Rent-List</li>
                 </ul>
                 <div className="hidden md:flex gap-3">
-                    <p className="w-[60px] h-[30px] bg-blue-500 py-2 text-white flex justify-center items-center rounded">Login</p>
+                   <Link href="/auth/login"><p className="w-[60px] h-[30px] bg-blue-500 py-2 text-white flex justify-center items-center rounded">Login</p></Link>
                     <Link href="/dashboard/profile"><CgProfile className="text-2xl"/></Link>
                 </div>
                 <div>
@@ -35,7 +35,7 @@ export function Navbar () {
                     <Link href="/"><li>Home</li></Link>
                     <Link href="/dashboard/tenant-form"><li>Add-Rent</li></Link>
                     <li>Rent-list</li>
-                    <p className="w-[60px] h-[30px] bg-blue-50lex justify-center items-center rounded">Login</p>
+                    <Link href="/auth/login"><p className="w-[60px] h-[30px] bg-blue-50lex justify-center items-center rounded">Login</p></Link><p className="w-[60px] h-[30px] bg-blue-50lex justify-center items-center rounded">Login</p>
                     <Link href="/dashboard/profile"><CgProfile className="text-2xl"/></Link>
 
                 </ul>
