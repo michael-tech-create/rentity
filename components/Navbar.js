@@ -35,7 +35,7 @@ export function Navbar () {
                     <Link href="/"><li>Home</li></Link>
                     <Link href="/dashboard/tenant-form"><li>Add-Rent</li></Link>
                     <li>Rent-list</li>
-                    <Link href="/auth/login"><p className="w-[60px] h-[30px] bg-blue-50lex justify-center items-center rounded">Login</p></Link><p className="w-[60px] h-[30px] bg-blue-50lex justify-center items-center rounded">Login</p>
+                    <Link href="/auth/login"><p className="w-[60px] h-[30px] bg-blue-50 flex justify-center items-center rounded">Login</p></Link>
                     <Link href="/dashboard/profile"><CgProfile className="text-2xl"/></Link>
 
                 </ul>
