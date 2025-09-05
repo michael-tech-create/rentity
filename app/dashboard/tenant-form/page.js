@@ -1,6 +1,9 @@
 "use client"
+import { db } from "@/config/firebase.config";
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { addDoc, collection } from "firebase/firestore";
 import { useFormik } from "formik";
+import { useSession } from "next-auth/react";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
@@ -15,6 +18,7 @@ const schema = yup.object().shape({
 });
 
 export default function TenantForm() {
+    const {data: session} = useSession();
     const { handleSubmit, handleChange, handleBlur, touched, values, errors } = useFormik({
         initialValues: {
             fullName: "",
@@ -26,9 +30,27 @@ export default function TenantForm() {
             paymentStatus: "",
             notes: "",
         },
-        onSubmit: (values, { resetForm }) => {
-            console.log(values);
+        onSubmit:  async(values, { resetForm }) => {
+           await addDoc(collection(db, "tenants"),{
+            user: session?.user?.id,
+            fullName: values.fullName,
+            phone: values.phone,
+            email: values.email,
+            apartment: values.apartment,
+            rentAmount: values.rentAmount,
+            dueDate: values.dueDate,
+            paymentStatus: values.paymentStatus,
+            notes: values.notes,
+            timeCreated: new Date().getTime(),
+           }).then(()=>{
+            alert("You have submitted successfully")
             resetForm();
+           })
+           .catch(e =>{
+            console.error(e)
+            alert("Unable to submit")
+           })
+            
         },
         validationSchema: schema,
     });

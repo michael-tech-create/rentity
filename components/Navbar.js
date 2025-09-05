@@ -32,11 +32,11 @@ export function Navbar () {
 
             <div className="px-5 pb-1 md:hidden">
                 <ul>
-                    <li>Home</li>
-                    <li>Add-Rent</li>
-                    <li>Add-List</li>
+                    <Link href="/"><li>Home</li></Link>
+                    <Link href="/dashboard/tenant-form"><li>Add-Rent</li></Link>
+                    <li>Rent-list</li>
                     <p className="w-[60px] h-[30px] bg-blue-50lex justify-center items-center rounded">Login</p>
-                    <CgProfile className="text-2xl"/>
+                    <Link href="/dashboard/profile"><CgProfile className="text-2xl"/></Link>
 
                 </ul>
             </div> )}
