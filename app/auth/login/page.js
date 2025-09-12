@@ -4,7 +4,6 @@ import { FcGoogle } from "react-icons/fc";
 
 export default async function Login () {
     const session = await auth();
-    console.log(session);
     return (
         <main className="min-h-screen flex justify-center px-2 md:px-12 lg:px-16 py-4 md:py-6 lg:py-12">
             <div className="w-full md:w-[356px] max-h-[420px] flex flex-col gap-8 rounded-lg md:shadow-md md:px-3 md:py-4">
@@ -12,7 +11,7 @@ export default async function Login () {
                     <h1 className="text-4xl font-semibold text-center">Sign In</h1>
                     <p className="block text-blue-300 text-center text-base ">Create an account or sign in</p>
                 </div>
-                <from className="justify-items-center">
+                <form className="justify-center items-center">
                     <div className="w-full mb-2">
                     <TextField
                     placeholder="@michael.com"
@@ -21,7 +20,7 @@ export default async function Login () {
                     <button type="submit" className="block text-white bg-blue-500 rounded-md w-full hover:opacity-40 p-3">
                         Continue
                     </button>
-                </from>
+                </form>
                 <p className="text-center">Or Sign up with </p>
                 <div className="flex-cols gap-2">
                     <form 
