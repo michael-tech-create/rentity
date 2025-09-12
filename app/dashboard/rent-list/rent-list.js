@@ -54,6 +54,7 @@ export default function RentList () {
                     height={300}
                     className="rounded-t-xl"
                     />
+
                     {/* Tenant Details */}
                     <div className="p-4">
                         <span className="block font-semibold text-gray-800"> {tenants.data.fullName} </span>
