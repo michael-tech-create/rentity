@@ -29,7 +29,7 @@ export default async function Login () {
                         "use server"
                         await signIn("google")
                     }}  
-                    className="justify-items-center">
+                    className="justify-center items-center">
                         <button className="w-full h-[45px] flex justify-center items-center gap-3 hover:shadow-md cursor-pointer rounded-md">
                             <FcGoogle className="text-2xl"/>
                             <span className="text-center font-semibold">Sign In with Google</span>
