@@ -1,45 +1,120 @@
-import { auth, signIn, signOut } from "@/auth";
-import { TextField } from "@mui/material";
-import { FcGoogle } from "react-icons/fc";
+"use client";
 
-export default async function Login () {
-    const session = await auth();
-    console.log(session);
-    return (
-        <main className="min-h-screen flex justify-center px-2 md:px-12 lg:px-16 py-4 md:py-6 lg:py-12">
-            <div className="w-full md:w-[356px] max-h-[420px] flex flex-col gap-8 rounded-lg md:shadow-md md:px-3 md:py-4">
-                <div>
-                    <h1 className="text-4xl font-semibold text-center">Sign In</h1>
-                    <p className="block text-blue-300 text-center text-base ">Create an account or sign in</p>
-                </div>
-                <from className="justify-center items-center">
-                    <div className="w-full mb-2">
-                    <TextField
-                    placeholder="@michael.com"
-                    className="w-full"/>
-                    </div>
-                    <button type="submit" className="block text-white bg-blue-500 rounded-md w-full hover:opacity-40 p-3">
-                        Continue
-                    </button>
-                </from>
-                <p className="text-center">Or Sign up with </p>
-                <div className="flex-cols gap-2">
-                    <form 
-                    action={async()=>{
-                        "use server"
-                        await signIn("google")
-                    }}  
-                    className="justify-center items-center">
-                        <button className="w-full h-[45px] flex justify-center items-center gap-3 hover:shadow-md cursor-pointer rounded-md">
-                            <FcGoogle className="text-2xl"/>
-                            <span className="text-center font-semibold">Sign In with Google</span>
+import { db } from "@/config/firebase.config";
+import { TimeStampToDate } from "@/utils/timestamp-date";
+import { Button, TextField } from "@mui/material";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useFormik } from "formik";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import React from "react";
+import * as Yup from "yup";
 
-                        </button>
+export default function RentList() {
+  const [tenants, setTenants] = React.useState([]);
+  const [filteredTenants, setFilteredTenants] = React.useState([]);
+  const { data: session } = useSession();
 
-                    </form>
-                </div>
+  React.useEffect(() => {
+    const fetchTenants = async () => {
+      try {
+        const q = query(
+          collection(db, "tenants"),
+          where("user", "==", session?.user?.id)
+        );
+        const snapShot = await getDocs(q);
+        const compileTenant = snapShot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
 
+        setTenants(compileTenant);
+        setFilteredTenants(compileTenant);
+      } catch (error) {
+        console.error("Error occured while fetching tenants", error);
+      }
+    };
+    if (session) fetchTenants();
+  }, [session]);
+
+  const { handleSubmit, handleChange, values, errors, touched } = useFormik({
+    initialValues: { search: "" },
+    validationSchema: Yup.object({
+      search: Yup.string()
+        .max(30, "Search query too long")
+        .matches(/^[a-zA-Z\s]*$/, "Only letters and spaces allowed")
+        .nullable(),
+    }),
+    onSubmit: (values) => {
+      const filtered = tenants.filter((tenant) =>
+        tenant.data.fullName
+          .toLowerCase()
+          .includes(values.search.toLowerCase())
+      );
+      setFilteredTenants(filtered);
+    },
+  });
+
+  return (
+    <main className="min-h-screen mx-auto py-8 bg-gray-50 shadow-lg">
+      <h1 className="text-3xl font-semi-bold mb-6 text-center">Rent List</h1>
+      <p className="text-center text-gray-500 mb-6">Collection of All Rents Paid</p>
+
+      <div className="max-w-md mx-auto mb-8 px-4">
+        <form onSubmit={handleSubmit} className="flex-col gap-3">
+          <div>
+            <TextField
+              fullWidth
+              size="small"
+              variant="outlined"
+              label="Search"
+              name="search"
+              id="search"
+              value={values.search}
+              onChange={handleChange}
+            />
+            {touched.search && errors.search && (
+              <span className="text-red-500 text-xs">{errors.search}</span>
+            )}
+          </div>
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            Search
+          </Button>
+        </form>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 mt-5 px-10 gap-6">
+        {filteredTenants.map((tenant) => (
+          <div key={tenant.id} className="bg-white rounded-xl shadow-md overflow-hidden">
+            <Image
+              src="/building.webp"
+              alt="Tenant"
+              width={300}
+              height={300}
+              className="rounded-t-xl"
+            />
+            <div className="p-4">
+              <span className="block font-semibold text-gray-800">
+                {tenant.data.fullName}
+              </span>
+              <span className="block text-sm text-gray-500">{tenant.data.phone}</span>
+              <span className="block text-sm text-gray-500">{tenant.data.email}</span>
+              <span className="block font-medium text-gray-800">{tenant.data.apartment}</span>
+              <span className="block font-semibold">{tenant.data.rentAmount}</span>
+              <span className="block text-sm font-semibold text-gray-500">
+                {tenant.data.dueDate}
+              </span>
+              <span className="block text-sm font-semibold text-green-500">
+                {tenant.data.paymentStatus}
+              </span>
+              <span className="block text-sm text-gray-800">
+                {TimeStampToDate(tenant.data.timeCreated)}
+              </span>
+              <span className="block text-sm text-gray-600">{tenant.data.notes}</span>
             </div>
-        </main>
-    );
+          </div>
+        ))}
+      </div>
+    </main>
+  );
 }
