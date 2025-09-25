@@ -1,5 +1,5 @@
 import { auth, signOut } from "@/auth";
-import { AuthorizationCheck } from "@/config/authorization-check";
+import { AuthorizationCheck } from "@/config/authorization-checks";
 import { Button } from "@mui/material";
 import Image from "next/image";
 
